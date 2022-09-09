@@ -1,40 +1,62 @@
-<?php
+<div id="main">
+    <div id="wrapper" class="Center-Container">
+        <div id="page-content-wrapper">
+            <div id="page-content" >
+                <div class="container">
+                    <div class="col">
+                        <div class="col-md-6 col-sm-offset-3 box">
 
-class Login extends Controller {
+                            <?php if(isset($this->notif) and !empty($this->notif)){ ?>
+                            <div class="alert alert-<?php echo $this->notif['type']; ?> alert-dismissable">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                <?php echo $this->notif['msg']; ?>
+                            </div>
+                            <?php } ?>
 
-    function __construct() {
-        
-        parent::__construct();
-        if(isset($_SESSION['logged_in'])){
-            header("location: " . APP_URL . "index");
-        }
-    }
+                            <div id="loginbox" style="" class="mainbox">                    
+                                <div class="panel panel-primary" >
+                                    <div class="panel-heading" style="height: 40px;">
+                                        <div class="panel-title pull-left">HTU Store - POS Panel</div>
+                                    </div>     
+                                    <div style="padding-top:40px" class="panel-body" >
+                                        <form method="POST" action="<?php echo APP_URL; ?>login" class="form-horizontal" role="form">
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                                <input type="email" class="form-control" id="email" name="email" value="<?php echo @$_POST['email'];?>" placeholder="Email address" required>                                        
+                                            </div>
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                            </div>
+                                            <div class="input-group">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="remember" name="remember" value="1"> Remember me
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div style="margin-top:10px" class="form-group">
+                                                <div class="col-sm-12 controls">
+                                                    <button type="submit" class="btn btn-primary">Sign In</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12 control">
+                                                    <div style="border-top: 1px solid#888; padding-top:15px;font-size:95%" >
+                                                        <a href="#">Forgot password ?</a>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </form>     
+                                    </div>                     
+                                </div>  
+                            </div>
+                        </div>
 
-    /*
-     * Login controller
-     */
-    public function index() {
-        $this->view->title = 'MyStore | Login';
-        
-        if(count($_POST)){
-            $result = $this->model->login();
-            if($result){
-                header("location: " . APP_URL . "index");
-            }
-            else{
-                $notif = array('msg' => 'Email address or password incorrect!', 'type' => 'danger');
-                $this->view->notif = $notif;
-            }
-        }
-        
-        //echo Hash::create('1234', HASH_PASSWORD_KEY, 'sha1'); exit;
+                    </div>
+                </div>
+            </div><!-- #page-content -->
+        </div><!-- #page-content-wrapper -->
+    </div><!-- #wrapper -->
+</div><!-- #main -->
 
-        /*
-         * Load view
-         */
-        $this->view->render('auth/includes/header');
-        $this->view->render('auth/login');
-        $this->view->render('auth/includes/footer');
-    }
-
-}
